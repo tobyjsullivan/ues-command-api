@@ -97,6 +97,8 @@ Example response:
 
 ### POST /commands/create-account
 
+Authentication: NONE
+
 This endpoint creates a new account.
 
 #### Request Params
@@ -112,4 +114,21 @@ This endpoint creates a new account.
 - `400 BAD_REQUEST` There is something wrong with your request such as a missing field or badly formatted value. Check `error` in the response for specific error information.
 - `409 CONFLICT` This account would conflict with another. Most likely the email address is already in use by another account.
 
+### POST /commands/create-store
 
+Authentication: Account Token
+
+Params:
+
+- `name` The DNS-friendly name for the store
+
+### POST /commands/commit-event
+
+Authentication: Store Write Token
+
+Params:
+
+- `entityId` The entity which the event applies to. Must be a 128 bit value represented as a UUID (e.g., `cc0ed51b-2ae3-4608-a47d-fdb5d040b848`).
+- `type` The event type identifier such as "AccountOpened".
+- `data` The JSON event data encoded with Base64.
+- `version` (optional) The version number of the event. The request will be rejected if this is not the next available version in the entity log.
