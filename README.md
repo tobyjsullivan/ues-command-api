@@ -70,7 +70,7 @@ Definitely file a bug report if you can reproduce.
 necessarily mean it can never happen - it will just likely result from
 external code we rely on rather than intentionally coded logic.
 
-### GET /commands
+### (NOT IMPLEMENTED) GET /commands
 
 Returns a list of available commands which the API supports.
 
@@ -127,7 +127,7 @@ for specific error information.
 - `409 CONFLICT` This account would conflict with another. Most likely
 the email address is already in use by another account.
 
-### POST /commands/create-store
+### (NOT IMPLEMENTED) POST /commands/create-store
 
 Authentication: Account Token
 
@@ -135,7 +135,7 @@ Params:
 
 - `name` The DNS-friendly name for the store
 
-### POST /commands/commit-event
+### (NOT IMPLEMENTED) POST /commands/commit-event
 
 Authentication: Store Write Token
 
