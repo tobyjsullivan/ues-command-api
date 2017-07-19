@@ -2,9 +2,6 @@
 	"ImportPath": "github.com/tobyjsullivan/ues-command-api",
 	"GoVersion": "go1.7",
 	"GodepVersion": "v79",
-	"Packages": [
-		"./..."
-	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/gorilla/mux",
@@ -17,9 +14,25 @@
 			"Rev": "b061729afc07e77a8aa4fad0a2fd840958f1942a"
 		},
 		{
+			"ImportPath": "github.com/tobyjsullivan/event-log-reader/log",
+			"Rev": "7cc14a9ab28d40747cca61b68cb6b1c722cba5c2"
+		},
+		{
+			"ImportPath": "github.com/tobyjsullivan/ues-sdk/event",
+			"Rev": "9e6fb864c088cc236f34324e954f4848febda7ae"
+		},
+		{
 			"ImportPath": "github.com/urfave/negroni",
 			"Comment": "v0.2.0-115-g1d8981a",
 			"Rev": "1d8981a52d6bda4467a9faacf3fdddd38222dfc4"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/pbkdf2",
+			"Rev": "9477e0b78b9ac3d0b03822fd95422e2fe07627cd"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/scrypt",
+			"Rev": "9477e0b78b9ac3d0b03822fd95422e2fe07627cd"
 		}
 	]
 }

@@ -1,0 +1,12 @@
+FROM golang
+
+RUN ["go", "get", "github.com/codegangsta/gin"]
+
+VOLUME ["/go/src/github.com/tobyjsullivan/ues-command-api"]
+
+EXPOSE 3000
+
+WORKDIR /go/src/github.com/tobyjsullivan/ues-command-api
+
+CMD ["gin"]
+

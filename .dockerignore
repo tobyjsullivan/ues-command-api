@@ -1,4 +1,6 @@
-/gin-bin
-/.idea
+.env
+data
+env
+.idea
 *.iml
-/.env
+
