@@ -8,69 +8,51 @@ import (
 
 const (
     EventTypeAccountOpened = "AccountOpened"
-    EventTypeIdentityRegistered = "IdentityRegistered"
+    EventTypeEmailIdentityRegistered = "EmailIdentityRegistered"
 )
 
 type accountOpened struct {
     AccountID string `json:"accountId"`
-    IdentityID string `json:"identityId"`
 }
 
-func AccountOpened(accountId uuid.UUID, identityId uuid.UUID) (*Event, error) {
+func AccountOpened(accountId uuid.UUID) (*Event, error) {
     data := accountOpened{
         AccountID: accountId.String(),
-        IdentityID: identityId.String(),
     }
 
-    jsObj, err := json.Marshal(&data)
-    if err != nil {
-        return nil, err
-    }
-
-    return &Event{
-        Type: EventTypeAccountOpened,
-        Data: jsObj,
-    }, nil
+    return encodeEvent(EventTypeAccountOpened, &data)
 }
 
-type identityRegistered struct {
+type emailIdentityRegistered struct {
     IdentityID string `json:"identityId"`
-    IdentityType string `json:"identityType"`
-    Params interface{} `json:"params"`
-}
-
-type emailPasswordIdentityParams struct {
+    AccountID string `json:"accountID"`
     Email string `json:"email"`
-    PasswordHash string `json:"passwordHash"`
     PasswordHashAlgorithm string `json:"passwordHashAlgorithm"`
-    PasswordHashParams interface{} `json:"passwordHashParams"`
+    PasswordHash string `json:"passwordHash"`
+    PasswordSalt string `json:"passwordSalt"`
 }
 
-type PasswordHash struct {
-    Hash []byte
-    Algorithm string
-    Params interface{}
-}
-
-func EmailPasswordIdentityRegistered(identityId uuid.UUID, email string, passwordHash *PasswordHash) (*Event, error) {
-    data := identityRegistered{
+func EmailIdentityRegistered(identityId uuid.UUID, accountId uuid.UUID, email string, hashAlgorithm string, passwordHash []byte, passwordSalt []byte) (*Event, error) {
+    data := emailIdentityRegistered{
         IdentityID: identityId.String(),
-        IdentityType: "EmailPassword",
-        Params: &emailPasswordIdentityParams{
-            Email: email,
-            PasswordHash: base64.StdEncoding.EncodeToString(passwordHash.Hash),
-            PasswordHashAlgorithm: passwordHash.Algorithm,
-            PasswordHashParams: passwordHash.Params,
-        },
+        AccountID: accountId.String(),
+        Email: email,
+        PasswordHashAlgorithm: hashAlgorithm,
+        PasswordHash: base64.StdEncoding.EncodeToString(passwordHash),
+        PasswordSalt: base64.StdEncoding.EncodeToString(passwordSalt),
     }
 
-    jsObj, err := json.Marshal(&data)
+    return encodeEvent(EventTypeEmailIdentityRegistered, &data)
+}
+
+func encodeEvent(eventType string, data interface{}) (*Event, error) {
+    jsObj, err := json.Marshal(data)
     if err != nil {
         return nil, err
     }
 
     return &Event{
-        Type: EventTypeIdentityRegistered,
+        Type: eventType,
         Data: jsObj,
     }, nil
 }

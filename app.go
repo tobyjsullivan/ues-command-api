@@ -17,19 +17,16 @@ import (
     "github.com/tobyjsullivan/ues-command-api/events"
     "github.com/satori/go.uuid"
     "net/url"
-    "golang.org/x/crypto/scrypt"
     "io"
     "crypto/rand"
-    "encoding/base64"
+    "github.com/tobyjsullivan/ues-command-api/passwords"
 )
 
 const (
     serviceLogId = "db0173f9-efdd-49b8-b778-883dc9666635"
+
+    PW_HASH_ALGO = passwords.HASH_ALGO_SCRYPT_1
     PW_SALT_BYTES = 32
-    PW_HASH_BYTES = 64
-    PW_N = 1<<14
-    PW_R = 8
-    PW_P = 1
 )
 
 var (
@@ -112,7 +109,7 @@ func createAccountHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    passwordHash, err := scrypt.Key([]byte(password), salt, PW_N, PW_R, PW_P, PW_HASH_BYTES)
+    passwordHash, err := passwords.Hash(PW_HASH_ALGO, password, salt)
     if err != nil {
         respondWithJson(w, nil, err, http.StatusInternalServerError)
         return
@@ -120,39 +117,27 @@ func createAccountHandler(w http.ResponseWriter, r *http.Request) {
 
 
     txn := make([]*events.Event, 0)
-    identityId := uuid.NewV4()
-    e, err := events.EmailPasswordIdentityRegistered(identityId, email, &events.PasswordHash{
-        Hash: passwordHash,
-        Algorithm: "scrypt",
-        Params: struct {
-            Salt string `json:"salt"`
-            N int `json:"n"`
-            R int `json:"r"`
-            P int `json:"p"`
-            KeyLen int `json:"keyLength"`
-        }{
-            Salt: base64.StdEncoding.EncodeToString(salt),
-            N: PW_N,
-            R: PW_R,
-            P: PW_P,
-            KeyLen: PW_HASH_BYTES,
-        },
-    })
-    if err != nil {
-        respondWithJson(w, nil, err, http.StatusInternalServerError)
-        return
-    }
 
-    txn = append(txn, e)
-
+    // Create the account
     accountId := uuid.NewV4()
-    e, err = events.AccountOpened(accountId, identityId)
+    e, err := events.AccountOpened(accountId)
     if err != nil {
         respondWithJson(w, nil, err, http.StatusInternalServerError)
         return
     }
 
     txn = append(txn, e)
+
+    // Associate the email identity with the account
+    identityId := uuid.NewV4()
+    e, err = events.EmailIdentityRegistered(identityId, accountId, email, PW_HASH_ALGO, passwordHash, salt)
+    if err != nil {
+        respondWithJson(w, nil, err, http.StatusInternalServerError)
+        return
+    }
+
+    txn = append(txn, e)
+
 
     for _, e := range txn {
         err = writer.WriteEvent(e)
