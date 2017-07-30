@@ -18,6 +18,10 @@
 			"Rev": "7cc14a9ab28d40747cca61b68cb6b1c722cba5c2"
 		},
 		{
+			"ImportPath": "github.com/tobyjsullivan/log-sdk/reader",
+			"Rev": "4ee5d1da4c79b1d6c51621d140e7ec1c29b8186f"
+		},
+		{
 			"ImportPath": "github.com/tobyjsullivan/ues-sdk/event",
 			"Rev": "9e6fb864c088cc236f34324e954f4848febda7ae"
 		},

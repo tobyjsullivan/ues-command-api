@@ -20,16 +20,16 @@ import (
     "io"
     "crypto/rand"
     "github.com/tobyjsullivan/ues-command-api/passwords"
+    "github.com/tobyjsullivan/log-sdk/reader"
 )
 
 const (
-    serviceLogId = "db0173f9-efdd-49b8-b778-883dc9666635"
-
     PW_HASH_ALGO = passwords.HASH_ALGO_SCRYPT_1
     PW_SALT_BYTES = 32
 )
 
 var (
+    serviceLogId reader.LogID
     logger *log.Logger
     writer *logs.LogWriter
 )
@@ -44,7 +44,7 @@ func init()  {
     }
 
     logId := logsdk.LogID{}
-    logId.Parse(serviceLogId)
+    logId.Parse(os.Getenv("SERVICE_LOG_ID"))
     writer = &logs.LogWriter{
         ApiURL: logWriterApi,
         LogID: logId,

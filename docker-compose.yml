@@ -11,6 +11,7 @@ services:
     depends_on:
     - "event-log"
     environment:
+    - SERVICE_LOG_ID=db0173f9-efdd-49b8-b778-883dc9666635
     - LOG_WRITER_API=http://event-log:3000/
   event-history:
     image: tobyjsullivan/event-history:latest
