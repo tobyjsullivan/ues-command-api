@@ -15,15 +15,15 @@
 		},
 		{
 			"ImportPath": "github.com/tobyjsullivan/event-log-reader/log",
-			"Rev": "7cc14a9ab28d40747cca61b68cb6b1c722cba5c2"
+			"Rev": "814d6243ba23578d14dd2b6700cb698fd41c5cc2"
 		},
 		{
 			"ImportPath": "github.com/tobyjsullivan/log-sdk/reader",
-			"Rev": "4ee5d1da4c79b1d6c51621d140e7ec1c29b8186f"
+			"Rev": "038da7a1a744c9b3d9fc751edb7a0e94559f4f86"
 		},
 		{
 			"ImportPath": "github.com/tobyjsullivan/ues-sdk/event",
-			"Rev": "9e6fb864c088cc236f34324e954f4848febda7ae"
+			"Rev": "6270f32298e3b870dba482e8717d02e5fa53c5ac"
 		},
 		{
 			"ImportPath": "github.com/urfave/negroni",

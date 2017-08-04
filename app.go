@@ -11,7 +11,6 @@ import (
     "encoding/json"
     "log"
     "errors"
-    logsdk "github.com/tobyjsullivan/event-log-reader/log"
 
     "github.com/tobyjsullivan/ues-command-api/logs"
     "github.com/tobyjsullivan/ues-command-api/events"
@@ -21,6 +20,7 @@ import (
     "crypto/rand"
     "github.com/tobyjsullivan/ues-command-api/passwords"
     "github.com/tobyjsullivan/log-sdk/reader"
+    "github.com/tobyjsullivan/ues-command-api/projection"
 )
 
 const (
@@ -32,6 +32,8 @@ var (
     serviceLogId reader.LogID
     logger *log.Logger
     writer *logs.LogWriter
+    client *reader.Client
+    state *projection.Projection
 )
 
 func init()  {
@@ -43,12 +45,24 @@ func init()  {
         panic(err.Error())
     }
 
-    logId := logsdk.LogID{}
-    logId.Parse(os.Getenv("SERVICE_LOG_ID"))
+    serviceLogId.Parse(os.Getenv("SERVICE_LOG_ID"))
     writer = &logs.LogWriter{
         ApiURL: logWriterApi,
-        LogID: logId,
+        LogID: serviceLogId,
     }
+
+    readerSvc := os.Getenv("LOG_READER_API")
+
+    client, err = reader.New(&reader.ClientConfig{
+        ServiceAddress: readerSvc,
+        Logger: logger,
+    })
+    if err != nil {
+        panic("Error creating reader client. " + err.Error())
+    }
+
+    state = projection.NewProjection()
+    client.Subscribe(serviceLogId, reader.EventID{}, state.Apply, true)
 }
 
 
@@ -99,6 +113,12 @@ func createAccountHandler(w http.ResponseWriter, r *http.Request) {
 
     if password == "" {
         respondWithJson(w, nil, errors.New("password cannot be empty."), http.StatusBadRequest)
+        return
+    }
+
+    // Check if email is in use
+    if state.EmailInUse(email) {
+        respondWithJson(w, nil, errors.New("That email is already in use."), http.StatusConflict)
         return
     }
 

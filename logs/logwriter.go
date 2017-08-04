@@ -1,17 +1,17 @@
 package logs
 
 import (
-    logsdk "github.com/tobyjsullivan/event-log-reader/log"
     "github.com/tobyjsullivan/ues-command-api/events"
     "net/url"
     "net/http"
     "encoding/base64"
     "errors"
+    "github.com/tobyjsullivan/log-sdk/reader"
 )
 
 type LogWriter struct {
     ApiURL *url.URL
-    LogID logsdk.LogID
+    LogID reader.LogID
 }
 
 func (w *LogWriter) WriteEvent(e *events.Event) error {

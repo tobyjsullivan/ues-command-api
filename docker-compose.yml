@@ -13,6 +13,7 @@ services:
     environment:
     - SERVICE_LOG_ID=db0173f9-efdd-49b8-b778-883dc9666635
     - LOG_WRITER_API=http://event-log:3000/
+    - LOG_READER_API=http://event-log-reader:3000/
   event-history:
     image: tobyjsullivan/event-history:latest
     ports:
@@ -34,6 +35,13 @@ services:
     - PG_USERNAME=postgres
     - PG_PASSWORD=pass1234
     - PG_DATABASE=postgres
+    - REDIS_HOSTNAME=redis
+    - REDIS_PORT=6379
+    - REDIS_PASSWORD=
+  redis:
+    image: redis:3.0
+    volumes:
+    - ./data/redis:/data
   event-log:
     image: tobyjsullivan/event-log:latest
     ports:
