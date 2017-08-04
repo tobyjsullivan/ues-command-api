@@ -10,6 +10,7 @@ services:
     - "3000:3000"
     depends_on:
     - "event-log"
+    - "event-log-reader"
     environment:
     - SERVICE_LOG_ID=db0173f9-efdd-49b8-b778-883dc9666635
     - LOG_WRITER_API=http://event-log:3000/
