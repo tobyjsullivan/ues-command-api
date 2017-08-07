@@ -16,7 +16,7 @@ services:
     - LOG_WRITER_API=http://event-log:3000/
     - LOG_READER_API=http://event-log-reader:3000/
   event-log-reader:
-    image: tobyjsullivan/event-log-reader:1.0.0
+    image: tobyjsullivan/event-log-reader:1.0
     ports:
     - "6105:3000"
     depends_on:
@@ -36,7 +36,7 @@ services:
     volumes:
     - ./data/redis:/data
   event-log:
-    image: tobyjsullivan/event-log:1.0.0
+    image: tobyjsullivan/event-log:1.0
     ports:
     - "6101:3000"
     depends_on:
@@ -49,19 +49,19 @@ services:
     - PG_PASSWORD=pass1234
     - PG_DATABASE=postgres
   db:
-    image: tobyjsullivan/logs-db:1.0.0
+    image: tobyjsullivan/logs-db:1.0
     environment:
     - POSTGRES_PASSWORD=pass1234
     volumes:
     - ./data:/var/lib/postgresql/data
   event-reader:
-    image: tobyjsullivan/event-reader:3.0.0
+    image: tobyjsullivan/event-reader:3.0
     ports:
     - "6102:3000"
     env_file:
     - ./env/event-reader.env
   event-store:
-    image: tobyjsullivan/event-store:3.0.0
+    image: tobyjsullivan/event-store:3.0
     ports:
     - "6103:3000"
     env_file:
