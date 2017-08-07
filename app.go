@@ -61,6 +61,10 @@ func init()  {
         panic("Error creating reader client. " + err.Error())
     }
 
+    if err = client.ValidateLog(serviceLogId); err != nil {
+        panic("Error validating Log. " + err.Error())
+    }
+
     state = projection.NewProjection()
     client.Subscribe(serviceLogId, reader.EventID{}, state.Apply, true)
 }

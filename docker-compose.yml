@@ -7,7 +7,7 @@ services:
     volumes:
     - .:/go/src/github.com/tobyjsullivan/ues-command-api
     ports:
-    - "3000:3000"
+    - "6100:3000"
     depends_on:
     - "event-log"
     - "event-log-reader"
@@ -18,7 +18,7 @@ services:
   event-log-reader:
     image: tobyjsullivan/event-log-reader:1.0.0
     ports:
-    - "3005:3000"
+    - "6105:3000"
     depends_on:
     - "db"
     - "event-reader"
@@ -38,7 +38,7 @@ services:
   event-log:
     image: tobyjsullivan/event-log:1.0.0
     ports:
-    - "3001:3000"
+    - "6101:3000"
     depends_on:
     - "db"
     - "event-store"
@@ -57,13 +57,13 @@ services:
   event-reader:
     image: tobyjsullivan/event-reader:3.0.0
     ports:
-    - "3002:3000"
+    - "6102:3000"
     env_file:
     - ./env/event-reader.env
   event-store:
     image: tobyjsullivan/event-store:3.0.0
     ports:
-    - "3003:3000"
+    - "6103:3000"
     env_file:
     - ./env/event-store.env
 
