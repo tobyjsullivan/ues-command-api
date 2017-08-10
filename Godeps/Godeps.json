@@ -9,21 +9,18 @@
 			"Rev": "599cba5e7b6137d46ddf58fb1765f5d928e69604"
 		},
 		{
+			"ImportPath": "github.com/rs/cors",
+			"Comment": "v1.2-1-geabcc6a",
+			"Rev": "eabcc6af4bbe5ad3a949d36450326a2b0b9894b8"
+		},
+		{
 			"ImportPath": "github.com/satori/go.uuid",
 			"Comment": "v1.1.0-6-gb061729",
 			"Rev": "b061729afc07e77a8aa4fad0a2fd840958f1942a"
 		},
 		{
-			"ImportPath": "github.com/tobyjsullivan/event-log-reader/log",
-			"Rev": "814d6243ba23578d14dd2b6700cb698fd41c5cc2"
-		},
-		{
 			"ImportPath": "github.com/tobyjsullivan/log-sdk/reader",
 			"Rev": "267748f6be1c9861ef408ee75685ebf69412eb50"
-		},
-		{
-			"ImportPath": "github.com/tobyjsullivan/ues-sdk/event",
-			"Rev": "6270f32298e3b870dba482e8717d02e5fa53c5ac"
 		},
 		{
 			"ImportPath": "github.com/urfave/negroni",

@@ -21,6 +21,7 @@ import (
     "github.com/tobyjsullivan/ues-command-api/passwords"
     "github.com/tobyjsullivan/log-sdk/reader"
     "github.com/tobyjsullivan/ues-command-api/projection"
+    "github.com/rs/cors"
 )
 
 const (
@@ -34,6 +35,7 @@ var (
     writer *logs.LogWriter
     client *reader.Client
     state *projection.Projection
+    corsAllowedOrigin string
 )
 
 func init()  {
@@ -49,6 +51,16 @@ func init()  {
     writer = &logs.LogWriter{
         ApiURL: logWriterApi,
         LogID: serviceLogId,
+    }
+
+    corsAllowedOrigin = os.Getenv("FRONTEND_URL")
+    if(corsAllowedOrigin != "") {
+        url, err := url.Parse(corsAllowedOrigin)
+        if err != nil {
+            panic("Error parsing FRONTEND_URL. "+err.Error())
+        }
+
+        corsAllowedOrigin = url.String()
     }
 
     readerSvc := os.Getenv("LOG_READER_API")
@@ -70,7 +82,7 @@ func main() {
     r := buildRoutes()
 
     n := negroni.New()
-    n.UseHandler(r)
+    n.UseHandler(corsHandler(r))
 
     port := os.Getenv("PORT")
     if port == "" {
@@ -86,6 +98,19 @@ func buildRoutes() http.Handler {
     r.HandleFunc("/commands/create-account", createAccountHandler).Methods("POST")
 
     return r
+}
+
+func corsHandler(h http.Handler) http.Handler {
+    if(corsAllowedOrigin == "") {
+        return h
+    }
+
+    logger.Println("Allowed origin:", corsAllowedOrigin)
+    c := cors.New(cors.Options{
+        AllowedOrigins: []string{corsAllowedOrigin},
+    })
+
+    return c.Handler(h)
 }
 
 func statusHandler(w http.ResponseWriter, r *http.Request) {
