@@ -13,6 +13,7 @@ services:
     - "event-log-reader"
     environment:
     - SERVICE_LOG_ID=db0173f9-efdd-49b8-b778-883dc9666635
+    - FRONTEND_URL=http://localhost:3000
     - LOG_WRITER_API=http://event-log:3000/
     - LOG_READER_API=http://event-log-reader:3000/
   event-log-reader:
